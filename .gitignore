@@ -272,3 +272,6 @@ pgdata/
 venv/
 
 .vscode/
+
+app/config/dev.py
+app/config/live.py
