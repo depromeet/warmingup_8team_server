@@ -45,7 +45,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = f'postgresql+psycopg2://{Config.DB_USERNAME}:{Config.DB_PASSWORD}@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}'
+    url = Config.db_url
     context.configure(
         url=url, target_metadata=target_metadata, literal_binds=True)
 
