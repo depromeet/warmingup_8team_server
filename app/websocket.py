@@ -1,4 +1,5 @@
 import asyncio
+
 import websockets
 
 
@@ -12,7 +13,7 @@ async def chatroom(websocket, path):
     print(f"> {greeting}")
 
 
-start_server = websockets.serve(chatroom, 'localhost', 8080)
+start_server = websockets.serve(chatroom, "localhost", 8080)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()

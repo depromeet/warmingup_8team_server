@@ -1,1 +1,1 @@
-hug -m app
+mypy --config-file mypy.ini . && hug -m app
