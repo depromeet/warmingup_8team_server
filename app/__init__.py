@@ -1,5 +1,8 @@
+import json
+
 import hug
-from app import models
+from app import api, models
+from app.db import create_session
 from app.decorators import route
 
 
@@ -12,13 +15,22 @@ def request(request: hug.Request, response: hug.Response):
 
 @hug.response_middleware()
 def response(request: hug.Request, response: hug.Response, resource):
-    """packet = request.context['packet']
-    packet.response_header = response.headers
-    packet.response_body = json.loads(response.data)
-    session.add(packet)
-    session.commit()"""
+    session = create_session()
+    try:
+        packet = request.context['packet']
+        packet.response_header = response.headers
+        packet.response_body = json.loads(response.data)
+        session.add(packet)
+        session.commit()
+    except Exception:
+        session.rollback()
+
+
+@hug.extend_api()
+def apis():
+    return [api]
 
 
 @route("/", methods=["GET"])
-def index() -> dict:
+def index(context) -> dict:
     return {"id": "123", "text": "test"}

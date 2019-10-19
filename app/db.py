@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from app.config import Config
 from sqlalchemy import Column, DateTime, Integer
@@ -6,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 engine = Config.engine()
-session = scoped_session(
+create_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
 
@@ -19,7 +20,7 @@ class BaseModel:
 
     @property
     def session(self):
-        return session.object_session(self)
+        return create_session().object_session(self)
 
     """def to_json(self):
     # TODO: 자신의 column들을 탐색해 전부 JSON으로 변환 및 반환
@@ -34,4 +35,4 @@ class BaseModel:
     return data"""
 
 
-Base = declarative_base(bind=engine, cls=BaseModel)
+Base: Any = declarative_base(bind=engine, cls=BaseModel)

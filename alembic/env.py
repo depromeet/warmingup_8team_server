@@ -7,7 +7,7 @@ from app import db, models
 from app.config import Config
 from sqlalchemy import engine_from_config, pool
 
-sys.path.append(os.getcwd())
+sys.path.append(os.getcwd())  # isort:skip
 
 
 # this is the Alembic Config object, which provides

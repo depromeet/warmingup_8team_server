@@ -275,3 +275,5 @@ venv/
 
 app/config/dev.py
 app/config/live.py
+
+dpm.code-workspace
