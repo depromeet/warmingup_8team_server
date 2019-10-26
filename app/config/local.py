@@ -1,5 +1,5 @@
-from config import Config
+from app.config.base import BaseConfig
 
 
-class LocalConfig(Config):
-    pass
+class Config(BaseConfig):
+    SECRET_KEY = 'testasd'

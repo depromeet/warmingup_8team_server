@@ -1,32 +1,34 @@
+import traceback
 from functools import wraps
-from typing import Iterable
 
-from app import hug
+from app import db
 from app.context import ApiContext
-from app.db import create_session
+from flask import abort, request
 
 
-def route(path, methods: Iterable = frozenset([]), *args, **kwargs):
-    def decorator(fn):
-        @wraps(fn)
-        def wrapper(*args, **kwargs) -> dict:
-            session = create_session()
-            try:
-                context = ApiContext(session)
-                res = fn(context, *args, **kwargs)
-                if type(res) is not dict:
-                    raise
-
+def router(application, **kwargs):
+    def route(uri, **kwargs):
+        def wrapper(fn):
+            @wraps(fn)
+            def decorator(*args, **kwargs):
+                session = db.create_session()
+                res = None
+                try:
+                    context = ApiContext(session=session, request=request)
+                    kwargs['context'] = context
+                    res = fn(*args, **kwargs)
+                    context.session.commit()
+                except Exception as e:
+                    print(traceback.format_exc())
+                    session.rollback()
+                    return abort(400, e)
+                finally:
+                    session.close()
                 return res
-            except Exception as e:
-                session.rollback()
-                print(e)
-                return {'error': e}
 
-        for m in methods:
-            method = getattr(hug, m.lower())(path, *args, **kwargs)
-            method(wrapper)
+            application.add_url_rule(uri, fn.__name__, decorator, **kwargs)
+            return decorator
 
         return wrapper
 
-    return decorator
+    return route

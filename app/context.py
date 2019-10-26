@@ -1,6 +1,32 @@
+from typing import Optional
+
+from app.models import User
+from flask import session as mem_session
+from sqlalchemy.orm import scoped_session
+
+
 class ApiContext:
 
-    session = None
+    session: scoped_session = None
+    request = None
+    data: dict = {}
+    user: Optional[User] = None
 
-    def __init__(self, session):
+    def __init__(self, session: scoped_session, request):
         self.session = session
+        self.request = request
+
+        if self.request.method == 'POST':
+            self.data = self.request.json
+        elif self.request.method == 'GET':
+            self.data = self.request.args
+
+        if 'user_id' in mem_session:
+            self.user = (
+                self.session.query(User)
+                .filter(User.id == mem_session['user_id'])
+                .first()
+            )
+
+    def query(self, model):
+        return self.session.query(model)
