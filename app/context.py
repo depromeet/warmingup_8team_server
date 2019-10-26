@@ -1,4 +1,4 @@
-from app.models import User
+from app.models import Base, User
 from flask import session as mem_session
 from sqlalchemy.orm import scoped_session
 
@@ -26,5 +26,5 @@ class ApiContext:
                 .first()
             )
 
-    def query(self, model):
+    def query(self, model: Base):
         return self.session.query(model)
