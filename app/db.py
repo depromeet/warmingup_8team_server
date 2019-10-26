@@ -20,10 +20,11 @@ class BaseModel:
 
     @property
     def session(self):
-        import pdb
-
-        pdb.set_trace()
         return create_session().object_session(self)
+
+    @property
+    def query(self):
+        return self.session.query(self.__class__)
 
 
 Base: Any = declarative_base(bind=engine, cls=BaseModel)

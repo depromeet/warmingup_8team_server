@@ -1,5 +1,3 @@
-from typing import Optional
-
 from app.models import User
 from flask import session as mem_session
 from sqlalchemy.orm import scoped_session
@@ -7,10 +5,10 @@ from sqlalchemy.orm import scoped_session
 
 class ApiContext:
 
-    session: scoped_session = None
+    session: scoped_session
     request = None
     data: dict = {}
-    user: Optional[User] = None
+    user: User
 
     def __init__(self, session: scoped_session, request):
         self.session = session

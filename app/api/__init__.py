@@ -51,3 +51,24 @@ def login(context: ApiContext) -> dict:
         context.user.chatroom = chatroom
 
     return {'id': context.user.id}
+
+
+@route('/chatroom', methods=['GET'])
+def get_chatroom(context: ApiContext) -> dict:
+    chatroom = context.user.chatroom
+
+    return {
+        'url': chatroom.url,
+        'messages': [m.to_json() for m in chatroom.messages],
+    }
+
+
+@route('/message', methods=['POST'])
+def send_message(context: ApiContext) -> dict:
+    """
+    req params:
+        - text: str
+    """
+    m = context.user.send_message(context.data['text'])
+
+    return m.to_json()
