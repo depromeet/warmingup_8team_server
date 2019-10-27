@@ -12,7 +12,6 @@ entrypoints==0.3
 falcon==2.0.0
 flake8==3.7.8
 Flask==1.1.1
-hug==2.6.0
 identify==1.4.7
 idna==2.8
 importlib-metadata==0.23
