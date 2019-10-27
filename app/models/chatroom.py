@@ -31,8 +31,21 @@ class Chatroom(Base):
         2. messages order by created_at asc
         """
 
+        users = self.users
+
+        data = []
+        for u in users:
+            data.append(
+                {
+                    'name': u.name,
+                    'thumbnail_url': u.thumbnail_url,
+                    'email': u.email,
+                    'gender': u.gender,
+                }
+            )
+
         return {
             'url': self.url,
-            'users': [],
+            'users': data,
             'messages': [m.to_json() for m in self.messages],
         }

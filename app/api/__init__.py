@@ -1,3 +1,4 @@
+import requests
 from app import app, models
 from app.context import ApiContext
 from app.decorators import router
@@ -27,11 +28,17 @@ def login(context: ApiContext) -> dict:
         # Token받아서 Kakao에 User Infomation 요청 + 유저 get_or_create
         raise
 
+    profile = requests.get(
+        'https://kapi.kakao.com/v2/user/me',
+        headers={'Authorization': f'Bearer {context.data["access_token"]}'},
+    ).json()
+
     if context.user:
-        return {'id': context.user.id}
+        context.user.update(profile['kakao_account'])
+        return context.user.to_json()
 
     if context.user is None:
-        user = models.User()
+        user = models.User(profile['kakao_account'])
         context.session.add(user)
         context.session.commit()
         session['user_id'] = user.id
@@ -50,7 +57,7 @@ def login(context: ApiContext) -> dict:
         context.session.flush()
         context.user.chatroom = chatroom
 
-    return {'id': context.user.id}
+    return context.user.to_json()
 
 
 @route('/chatroom', methods=['GET'])

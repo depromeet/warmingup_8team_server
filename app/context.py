@@ -1,3 +1,5 @@
+from typing import Any, Union
+
 from app.models import Base, User
 from flask import session as mem_session
 from sqlalchemy.orm import scoped_session
@@ -8,11 +10,12 @@ class ApiContext:
     session: scoped_session
     request = None
     data: dict = {}
-    user: User
+    user: Union[User, Any]
 
     def __init__(self, session: scoped_session, request):
         self.session = session
         self.request = request
+        self.user = None
 
         if self.request.method == 'POST':
             self.data = self.request.json
