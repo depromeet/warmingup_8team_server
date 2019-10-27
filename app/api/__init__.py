@@ -38,13 +38,13 @@ def login(context: ApiContext) -> dict:
         return context.user.to_json()
 
     if context.user is None:
-        user = models.User.query().filter(
+        user = context.session.query(models.User).filter(
             models.User.email == profile['kakao_account']['email']
-        )
+        ).first()
         if user is None:
             user = models.User(profile['kakao_account'])
-        context.session.add(user)
-        context.session.commit()
+            context.session.add(user)
+            context.session.commit()
         session['user_id'] = user.id
         context.user = user
 
