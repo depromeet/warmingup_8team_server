@@ -4,10 +4,10 @@ from typing import Any
 from app.config import Config
 from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import Query, Session, scoped_session, sessionmaker
 
 engine = Config.engine()
-create_session = scoped_session(
+create_session: Session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
 
@@ -19,11 +19,11 @@ class BaseModel:
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     @property
-    def session(self):
+    def session(self) -> Session:
         return create_session().object_session(self)
 
     @property
-    def query(self):
+    def query(self) -> Query:
         return self.session.query(self.__class__)
 
 

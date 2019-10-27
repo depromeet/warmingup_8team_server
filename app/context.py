@@ -2,17 +2,18 @@ from typing import Any, Union
 
 from app.models import Base, User
 from flask import session as mem_session
-from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import Query, Session
+from werkzeug.wrappers import Request
 
 
 class ApiContext:
 
-    session: scoped_session
-    request = None
+    session: Session
+    request: Request
     data: dict = {}
     user: Union[User, Any]
 
-    def __init__(self, session: scoped_session, request):
+    def __init__(self, session: Session, request: Request):
         self.session = session
         self.request = request
         self.user = None
@@ -29,5 +30,5 @@ class ApiContext:
                 .first()
             )
 
-    def query(self, model: Base):
+    def query(self, model: Base) -> Query:
         return self.session.query(model)

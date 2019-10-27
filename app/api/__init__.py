@@ -38,9 +38,11 @@ def login(context: ApiContext) -> dict:
         return context.user.to_json()
 
     if context.user is None:
-        user = context.session.query(models.User).filter(
-            models.User.email == profile['kakao_account']['email']
-        ).first()
+        user = (
+            context.session.query(models.User)
+            .filter(models.User.email == profile['kakao_account']['email'])
+            .first()
+        )
         if user is None:
             user = models.User(profile['kakao_account'])
             context.session.add(user)
@@ -54,19 +56,18 @@ def login(context: ApiContext) -> dict:
             .filter(models.Chatroom.url == context.data['url'])
             .first()
         )
-        context.user.chatroom = chatroom
     else:
         chatroom = models.Chatroom()
         context.session.add(chatroom)
         context.session.flush()
-        context.user.chatroom = chatroom
+    context.user.chatroom = chatroom
 
     return context.user.to_json()
 
 
 @route('/chatroom', methods=['GET'])
 def get_chatroom(context: ApiContext) -> dict:
-    chatroom = context.user.chatroom
+    chatroom: models.Chatroom = context.user.chatroom
 
     return {
         'url': chatroom.url,
