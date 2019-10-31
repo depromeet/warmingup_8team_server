@@ -12,7 +12,7 @@ def login(context: ApiContext) -> dict:
     """
     req params:
      - access_token : 유저 인식하기 위한 토큰j
-     - chatroom url : optional (str or None)
+     - url : optional (str or None)
 
     scenario
      - access token을 받아서 KAKAO API에 User Info 요청
@@ -23,9 +23,7 @@ def login(context: ApiContext) -> dict:
      - 있으면 User정보 내려줌
     """
 
-    if context.data.get('access_token') is None:
-        # TODO(clogic): 구현해야함.
-        # Token받아서 Kakao에 User Infomation 요청 + 유저 get_or_create
+    if context.data.get('access_token') is None and context.user is None:
         raise
 
     profile = requests.get(
