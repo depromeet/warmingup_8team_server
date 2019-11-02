@@ -19,6 +19,13 @@ from app.api.question import *
 from flask import session
 
 
+@route('/', methods=['GET'])
+def index(context: ApiContext):
+    return {
+        'kkirook': 'hi'
+    }
+
+
 @socket_io.on('connect')
 def connect():
     context: ApiContext = create_context()
