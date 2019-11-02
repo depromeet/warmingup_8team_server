@@ -29,8 +29,6 @@ def update_chatroom(context: ApiContext, url) -> dict:
         f"{context.user.chatroom.random_str()}"
         f".{thumbnail.filename.split('.')[-1]}"
     )
-    # TODO(clogic): File을 다운로드해서 static folder에 저장해두기
-    # TODO(clogic): EC2에 띄울거면 s3에 저장하는것도 생각하기
 
     thumbnail.save(
         os.path.join(app.config['UPLOAD_FOLDER'], thumbnail.filename)
