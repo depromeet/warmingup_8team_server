@@ -1,4 +1,5 @@
 import traceback
+import json
 from functools import wraps
 
 from app import db, models
@@ -19,7 +20,7 @@ def router(application, **kwargs):
                     res = fn(*args, **kwargs)
                     packet = models.Packet(
                         request_header=dict(context.request.headers),
-                        request_body=dict(context.request.data),
+                        request_body=json.loads(context.request.data.decode()),
                         response_header={},
                         response_body=res,
                     )
