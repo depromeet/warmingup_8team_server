@@ -5,7 +5,7 @@ import json
 from typing import Any
 from app import app
 from app.decorators import router, create_context
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
 
 route: Any = router(app)
@@ -27,8 +27,9 @@ def request(data):
 
     message = data.get('message', '')
     
-    context.user.send_message(message)
+    send_message = context.user.send_message(message)
     context.session.commit()
+    send(send_message.to_json(), broadcast=True)
 
     # send({}, broadcast=True)
     # to_client = dict()
@@ -38,5 +39,5 @@ def request(data):
     # else:
     #     to_client['message'] = message
     #     to_client['type'] = 'normal'
-    # # emit("response", {'data': message['data'], 'username': session['username']}, broadcast=True)
+    # emit("response", {'data': message['data'], 'username': session['username']}, broadcast=True)
     # send(to_client, broadcast=True)

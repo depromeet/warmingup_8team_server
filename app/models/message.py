@@ -18,6 +18,7 @@ class Message(Base):
     def to_json(self):
         """
         resp info
+         - id 
          - user_id,
          - name
          - thumbnail_url
@@ -25,6 +26,7 @@ class Message(Base):
          - created_at
         """
         return {
+            'id': self.id,
             'user_id': self.user.id,
             'name': self.user.name,
             'thumbnail_url': self.user.thumbnail_url,
