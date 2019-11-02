@@ -1,3 +1,4 @@
+import redis
 from app.config.base import BaseConfig
 
 
@@ -8,3 +9,6 @@ class Config(BaseConfig):
     DB_USERNAME = 'kkirook'
     DB_PASSWORD = 'kkirook1234!'
     DB_NAME = 'kkirook'
+
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.from_url('127.0.0.1:6379')
