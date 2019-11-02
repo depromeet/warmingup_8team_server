@@ -4,7 +4,7 @@ import json
 
 from typing import Any
 from app import app
-from app.decorators import router
+from app.decorators import router, create_context
 from flask_socketio import SocketIO, send
 from flask_cors import CORS
 
@@ -18,6 +18,10 @@ from app.api.question import *
 
 @socket_io.on("message")
 def request(data):
+    context = create_context()
+    chatroom = context.user.chatroom
+    chatroom_users = chatroom.users
+
     message = data.get('message', '')
     # send({}, broadcast=True)
     # to_client = dict()

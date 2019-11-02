@@ -14,7 +14,7 @@ def router(application, **kwargs):
                 session = db.create_session()
                 res = None
                 try:
-                    context = ApiContext(session=session, request=request)
+                    context = create_context(session)
                     kwargs['context'] = context
                     res = fn(*args, **kwargs)
                     context.session.commit()
@@ -32,3 +32,9 @@ def router(application, **kwargs):
         return wrapper
 
     return route
+
+
+def create_context(session=None):
+    if session is None:
+        session = db.create_session()
+    return ApiContext(session=session, request=request)
