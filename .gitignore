@@ -277,3 +277,7 @@ app/config/dev.py
 app/config/live.py
 
 dpm.code-workspace
+
+*.png
+*.jpg
+*.jpeg

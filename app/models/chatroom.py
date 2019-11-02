@@ -52,5 +52,7 @@ class Chatroom(Base):
         return {
             'url': self.url,
             'users': data,
+            'thumbnail': self.thumbnail,
+            'name': self.name,
             'messages': [m.to_json() for m in self.messages],
         }
