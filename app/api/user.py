@@ -21,11 +21,11 @@ def login(context: ApiContext) -> dict:
      - 있으면 User정보 내려줌
     """
     if context.data.get('access_token') is None and context.user is None:
-        raise
+        raise Exception('session과 access_token이 없습니다.')
 
     if context.user:
         return context.user.to_json()
-    
+
     profile = requests.get(
         'https://kapi.kakao.com/v2/user/me',
         headers={'Authorization': f'Bearer {context.data["access_token"]}'},
@@ -61,7 +61,6 @@ def login(context: ApiContext) -> dict:
             context.session.commit()
         session['user_id'] = user.id
         context.user = user
-
 
     if context.data.get('url'):
         chatroom = (
