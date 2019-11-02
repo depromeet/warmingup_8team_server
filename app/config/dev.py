@@ -11,4 +11,4 @@ class Config(BaseConfig):
     DB_NAME = 'kkirook'
 
     SESSION_TYPE = 'redis'
-    SESSION_REDIS = redis.from_url('127.0.0.1:6379')
+    SESSION_REDIS = redis.from_url('redis://127.0.0.1:6370')

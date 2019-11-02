@@ -29,6 +29,7 @@ def index(context: ApiContext):
 @socket_io.on('connect')
 def connect():
     context: ApiContext = create_context()
+    print(context.session)
     join_room(context.user.chatroom.url)
     print('join')
 

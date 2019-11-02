@@ -10,8 +10,9 @@ from flask_cors import CORS
 app: Flask = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 app.config.from_object(Config)
-Session(app)
 CORS(app, supports_credentials=True)
+session = Session()
+session.init_app(app)
 
 
 @app.before_request
