@@ -11,8 +11,8 @@ class Question(Base):
     message = Column(String)
     answer = Column(String)
 
-    bot_id = Column(Integer, ForeignKey('Bot.id'))
-    bot = relationship('Bot', back_populates='questions')
+    user_id = Column(Integer, ForeignKey('User.id'))
+    user = relationship('User', back_populates='questions')
 
     def to_json(self):
         return {'message': self.message, 'answer': self.answer}

@@ -16,4 +16,4 @@ class Bot(Base):
     chatroom_id = Column(Integer, ForeignKey('Chatroom.id'))
     chatroom = relationship('Chatroom', back_populates='bot')
 
-    questions = relationship('Question', back_populates='bot')
+    # questions = relationship('Question', back_populates='bot')

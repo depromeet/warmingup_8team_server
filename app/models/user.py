@@ -15,6 +15,7 @@ class User(Base):
     chatroom: Chatroom = relationship('Chatroom', backref=backref('users'))
 
     messages = relationship('Message', back_populates='user')
+    questions = relationship('Question', back_populates='user')
 
     profile_url = Column(String)
     thumbnail_url = Column(String)
