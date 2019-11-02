@@ -1,5 +1,5 @@
 from app.db import Base
-from app.models import Message
+from app.models import Chatroom, Message
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.types import Boolean, Integer, String
@@ -12,7 +12,7 @@ class User(Base):
     name = Column(String)
 
     chatroom_id = Column(Integer, ForeignKey('Chatroom.id'))
-    chatroom = relationship('Chatroom', backref=backref('users'))
+    chatroom: Chatroom = relationship('Chatroom', backref=backref('users'))
 
     messages = relationship('Message', back_populates='user')
 

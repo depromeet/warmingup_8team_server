@@ -16,6 +16,8 @@ class Chatroom(Base):
         'Message', back_populates='chatroom', order_by='Message.created_at'
     )
 
+    bot = relationship('Bot', uselist=False, back_populates='chatroom')
+
     def __init__(self):
         self.url = self.random_str(10)
 
