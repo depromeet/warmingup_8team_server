@@ -18,8 +18,18 @@ class Message(Base):
     def to_json(self):
         """
         resp info
-         - username
+         - id 
+         - user_id,
+         - name
+         - thumbnail_url
          - text
          - created_at
         """
-        return {'text': self.text, 'created_at': str(self.created_at)}
+        return {
+            'id': self.id,
+            'user_id': self.user.id,
+            'name': self.user.name,
+            'thumbnail_url': self.user.thumbnail_url,
+            'text': self.text,
+            'created_at': str(self.created_at)
+        }
