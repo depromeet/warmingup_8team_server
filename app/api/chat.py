@@ -46,5 +46,4 @@ def send_message(context: ApiContext) -> dict:
         - text: str
     """
     m = context.user.send_message(context.data['text'])
-
     return m.to_json()

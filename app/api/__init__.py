@@ -11,18 +11,25 @@ from flask_cors import CORS
 route: Any = router(app)
 socket_io = SocketIO(app, host='0.0.0.0', port=5000, cors_allowed_origins="*")
 
+from app import models
+from app.context import ApiContext
 from app.api.user import *
 from app.api.chat import *
 from app.api.question import *
+from flask import session
 
 
 @socket_io.on("message")
 def request(data):
-    context = create_context()
+    context: ApiContext = create_context()
     chatroom = context.user.chatroom
     chatroom_users = chatroom.users
 
     message = data.get('message', '')
+    
+    context.user.send_message(message)
+    context.session.commit()
+
     # send({}, broadcast=True)
     # to_client = dict()
     # if message == 'new_connect':
