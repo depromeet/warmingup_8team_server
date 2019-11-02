@@ -26,12 +26,8 @@ def request(data):
     chatroom_users = chatroom.users
 
     message = data.get('message', '')
-    
+
     send_message = context.user.send_message(message)
     context.session.commit()
     join_room(chatroom.url)
-    send(
-        send_message.to_json(),
-        broadcast=True,
-        room=chatroom.url
-    )
+    send(send_message.to_json(), broadcast=True, room=chatroom.url)

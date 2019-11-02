@@ -13,6 +13,7 @@ falcon==2.0.0
 flake8==3.7.8
 Flask==1.1.1
 Flask-Cors==3.0.8
+Flask-SocketIO==4.2.1
 identify==1.4.7
 idna==2.8
 importlib-metadata==0.23
@@ -34,6 +35,8 @@ pyflakes==2.1.1
 pylint==2.4.2
 python-dateutil==2.8.0
 python-editor==1.0.4
+python-engineio==3.10.0
+python-socketio==4.3.1
 PyYAML==5.1.2
 requests==2.22.0
 six==1.12.0
@@ -48,4 +51,3 @@ websockets==8.0.2
 Werkzeug==0.16.0
 wrapt==1.11.2
 zipp==0.6.0
-Flask-SocketIO==4.2.1
