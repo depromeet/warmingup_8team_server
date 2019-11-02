@@ -13,6 +13,20 @@ def get_chatroom(context: ApiContext) -> dict:
     }
 
 
+@route('/chatroom/<url>', methods=['POST'])
+def update_chatroom(context: ApiContext) -> dict:
+    """
+    thumbnail
+    name
+    """
+
+    import pdb
+
+    pdb.set_trace()
+
+    return {}
+
+
 @route('/message', methods=['POST'])
 def send_message(context: ApiContext) -> dict:
     """

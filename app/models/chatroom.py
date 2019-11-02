@@ -11,6 +11,9 @@ class Chatroom(Base):
 
     __tablename__ = 'Chatroom'
 
+    name = Column(String)
+    thumbnail = Column(String)
+
     url = Column(String, unique=True)
     messages = relationship(
         'Message', back_populates='chatroom', order_by='Message.created_at'
