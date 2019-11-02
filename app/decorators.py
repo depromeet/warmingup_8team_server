@@ -1,7 +1,7 @@
 import traceback
 from functools import wraps
 
-from app import db
+from app import db, models
 from app.context import ApiContext
 from flask import abort, request
 
@@ -17,6 +17,14 @@ def router(application, **kwargs):
                     context = create_context(session)
                     kwargs['context'] = context
                     res = fn(*args, **kwargs)
+                    packet = models.Packet(
+                        request_header=dict(context.request.headers),
+                        request_body=dict(context.request.data),
+                        response_header={},
+                        response_body=res,
+                    )
+
+                    context.session.add(packet)
                     context.session.commit()
                 except Exception as e:
                     print(traceback.format_exc())
