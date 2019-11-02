@@ -12,7 +12,7 @@ def login(context: ApiContext) -> dict:
     """
     req params:
      - access_token : 유저 인식하기 위한 토큰j
-     - chatroom url : optional (str or None)
+     - url : optional (str or None)
 
     scenario
      - access token을 받아서 KAKAO API에 User Info 요청
@@ -23,9 +23,7 @@ def login(context: ApiContext) -> dict:
      - 있으면 User정보 내려줌
     """
 
-    if context.data.get('access_token') is None:
-        # TODO(clogic): 구현해야함.
-        # Token받아서 Kakao에 User Infomation 요청 + 유저 get_or_create
+    if context.data.get('access_token') is None and context.user is None:
         raise
 
     profile = requests.get(
@@ -38,9 +36,15 @@ def login(context: ApiContext) -> dict:
         return context.user.to_json()
 
     if context.user is None:
-        user = models.User(profile['kakao_account'])
-        context.session.add(user)
-        context.session.commit()
+        user = (
+            context.session.query(models.User)
+            .filter(models.User.email == profile['kakao_account']['email'])
+            .first()
+        )
+        if user is None:
+            user = models.User(profile['kakao_account'])
+            context.session.add(user)
+            context.session.commit()
         session['user_id'] = user.id
         context.user = user
 
@@ -50,19 +54,18 @@ def login(context: ApiContext) -> dict:
             .filter(models.Chatroom.url == context.data['url'])
             .first()
         )
-        context.user.chatroom = chatroom
     else:
         chatroom = models.Chatroom()
         context.session.add(chatroom)
         context.session.flush()
-        context.user.chatroom = chatroom
+    context.user.chatroom = chatroom
 
     return context.user.to_json()
 
 
 @route('/chatroom', methods=['GET'])
 def get_chatroom(context: ApiContext) -> dict:
-    chatroom = context.user.chatroom
+    chatroom: models.Chatroom = context.user.chatroom
 
     return {
         'url': chatroom.url,
