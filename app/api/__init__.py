@@ -19,6 +19,13 @@ from app.api.question import *
 from flask import session
 
 
+@socket_io.on('connect')
+def connect():
+    context: ApiContext = create_context()
+    join_room(context.user.chatroom.url)
+    print('join')
+
+
 @socket_io.on("message")
 def request(data):
     context: ApiContext = create_context()
@@ -28,6 +35,5 @@ def request(data):
     message = data.get('message', '')
 
     send_message = context.user.send_message(message)
-    context.session.commit()
-    join_room(chatroom.url)
     send(send_message.to_json(), broadcast=True, room=chatroom.url)
+    context.session.commit()
