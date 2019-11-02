@@ -10,6 +10,9 @@ class BaseConfig:
 
     SECRET_KEY = 'jaewonseungil!@#'
 
+    KAKAO_API_KEY = '6384ce12c018e22d76bb65391aaf2054'
+    UPLOAD_FOLDER = 'app/static'
+
     @classmethod
     def engine(cls):
         return create_engine(cls.db_url(), pool_size=50, max_overflow=0)
