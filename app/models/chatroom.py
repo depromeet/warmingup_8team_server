@@ -30,12 +30,6 @@ class Chatroom(Base):
         return ''.join(random.choice(letters) for i in range(length))
 
     def to_json(self):
-        """
-        resp info
-        1. 유저들 정보
-        2. messages order by created_at asc
-        """
-
         users = self.users
 
         data = []
