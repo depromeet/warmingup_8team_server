@@ -14,17 +14,21 @@ def get_chatroom(context: ApiContext) -> dict:
 
 
 @route('/chatroom/<url>', methods=['POST'])
-def update_chatroom(context: ApiContext) -> dict:
+def update_chatroom(context: ApiContext, url) -> dict:
     """
     thumbnail
     name
     """
+    if context.user.chatroom.url != url:
+        raise
+    name = context.request.form['name']
+    thumbnail = context.request.files['thimbnail']
+    # TODO(clogic): File을 다운로드해서 static folder에 저장해두기
+    # TODO(clogic): EC2에 띄울거면 s3에 저장하는것도 생각하기
 
-    import pdb
-
-    pdb.set_trace()
-
-    return {}
+    context.user.chatroom.name = name
+    context.user.chatroom.thumbnail = thumbnail
+    return context.user.chatroom.to_json()
 
 
 @route('/message', methods=['POST'])
