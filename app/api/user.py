@@ -43,7 +43,6 @@ def login(context: ApiContext) -> dict:
     session['user_id'] = user.id
     context.user = user
 
-<<<<<<<
     if context.user is None:
         profile = requests.get(
             'https://kapi.kakao.com/v2/user/me',
@@ -63,9 +62,7 @@ def login(context: ApiContext) -> dict:
         session['user_id'] = user.id
         context.user = user
 
-=======
 
->>>>>>>
     if context.data.get('url'):
         chatroom = (
             context.session.query(models.Chatroom)
