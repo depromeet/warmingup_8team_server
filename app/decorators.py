@@ -18,14 +18,15 @@ def router(application, **kwargs):
                     context = create_context(session)
                     kwargs['context'] = context
                     res = fn(*args, **kwargs)
-                    packet = models.Packet(
+
+                    '''packet = models.Packet(
                         request_header=dict(context.request.headers),
                         request_body=json.loads(context.request.data.decode()),
                         response_header={},
                         response_body=res,
                     )
 
-                    context.session.add(packet)
+                    context.session.add(packet)'''
                     context.session.commit()
                 except Exception as e:
                     print(traceback.format_exc())
