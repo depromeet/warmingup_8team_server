@@ -20,14 +20,30 @@ def login(context: ApiContext) -> dict:
      - 없으면 생성 후 User정보 내려줌
      - 있으면 User정보 내려줌
     """
-
     if context.data.get('access_token') is None and context.user is None:
         raise
 
     if context.user:
-        # context.user.update(profile['kakao_account'])
         return context.user.to_json()
+    
+    profile = requests.get(
+        'https://kapi.kakao.com/v2/user/me',
+        headers={'Authorization': f'Bearer {context.data["access_token"]}'},
+    ).json()
 
+    user = (
+        context.session.query(models.User)
+        .filter(models.User.email == profile['kakao_account']['email'])
+        .first()
+    )
+    if user is None:
+        user = models.User(profile['kakao_account'])
+        context.session.add(user)
+        context.session.commit()
+    session['user_id'] = user.id
+    context.user = user
+
+<<<<<<<
     if context.user is None:
         profile = requests.get(
             'https://kapi.kakao.com/v2/user/me',
@@ -47,6 +63,9 @@ def login(context: ApiContext) -> dict:
         session['user_id'] = user.id
         context.user = user
 
+=======
+
+>>>>>>>
     if context.data.get('url'):
         chatroom = (
             context.session.query(models.Chatroom)
@@ -60,3 +79,9 @@ def login(context: ApiContext) -> dict:
     context.user.chatroom = chatroom
 
     return context.user.to_json()
+
+
+@route('/logout', methods=['POST'])
+def logout(context: ApiContext) -> dict:
+    del session['user_id']
+    return {}
