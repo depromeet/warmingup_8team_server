@@ -43,31 +43,13 @@ def login(context: ApiContext) -> dict:
     session['user_id'] = user.id
     context.user = user
 
-    if context.user is None:
-        profile = requests.get(
-            'https://kapi.kakao.com/v2/user/me',
-            headers={
-                'Authorization': f'Bearer {context.data["access_token"]}'
-            },
-        ).json()
-        user = (
-            context.session.query(models.User)
-            .filter(models.User.email == profile['kakao_account']['email'])
-            .first()
-        )
-        if user is None:
-            user = models.User(profile['kakao_account'])
-            context.session.add(user)
-            context.session.commit()
-        session['user_id'] = user.id
-        context.user = user
-
     if context.data.get('url'):
         chatroom = (
             context.session.query(models.Chatroom)
             .filter(models.Chatroom.url == context.data['url'])
             .first()
         )
+        user.chatroom = chatroom
     else:
         chatroom = models.Chatroom()
         context.session.add(chatroom)
