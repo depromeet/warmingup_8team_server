@@ -24,16 +24,17 @@ def login(context: ApiContext) -> dict:
     if context.data.get('access_token') is None and context.user is None:
         raise
 
-    profile = requests.get(
-        'https://kapi.kakao.com/v2/user/me',
-        headers={'Authorization': f'Bearer {context.data["access_token"]}'},
-    ).json()
-
     if context.user:
-        context.user.update(profile['kakao_account'])
+        # context.user.update(profile['kakao_account'])
         return context.user.to_json()
 
     if context.user is None:
+        profile = requests.get(
+            'https://kapi.kakao.com/v2/user/me',
+            headers={
+                'Authorization': f'Bearer {context.data["access_token"]}'
+            },
+        ).json()
         user = (
             context.session.query(models.User)
             .filter(models.User.email == profile['kakao_account']['email'])
