@@ -23,19 +23,23 @@ def login(context: ApiContext) -> dict:
     if context.data.get('access_token') is None and context.user is None:
         raise Exception('session과 access_token이 없습니다.')
 
-    if context.user:
-        return context.user.to_json()
+    user = None
+    if context.data.get('access_token'):
+        profile = requests.get(
+            'https://kapi.kakao.com/v2/user/me',
+            headers={
+                'Authorization': f'Bearer {context.data["access_token"]}'
+            },
+        ).json()
 
-    profile = requests.get(
-        'https://kapi.kakao.com/v2/user/me',
-        headers={'Authorization': f'Bearer {context.data["access_token"]}'},
-    ).json()
+        user = (
+            context.session.query(models.User)
+            .filter(models.User.email == profile['kakao_account']['email'])
+            .first()
+        )
+    elif context.user:
+        user = context.user
 
-    user = (
-        context.session.query(models.User)
-        .filter(models.User.email == profile['kakao_account']['email'])
-        .first()
-    )
     if user is None:
         user = models.User(profile['kakao_account'])
         context.session.add(user)
