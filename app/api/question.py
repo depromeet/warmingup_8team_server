@@ -31,15 +31,14 @@ def create_question(context: ApiContext) -> dict:
      - message (required) -> str
      - answer (required) -> str
     """
-
     question = models.Question(
         message=context.data['message'],
         answer=context.data['answer'],
         user=context.user,
     )
+
     context.session.add(question)
     context.session.flush()
-
     return question.to_json()
 
 
