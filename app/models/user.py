@@ -55,5 +55,6 @@ class User(Base):
             'email': self.email,
             'gender': self.gender,
             'chatroom': self.chatroom.to_json(),
+            'questions': [q.to_json() for q in self.questions],
             'question_sample': samples,
         }
