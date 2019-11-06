@@ -42,6 +42,11 @@ class User(Base):
         self.gender = profile['gender'] == 'male'
 
     def to_json(self) -> dict:
+        samples = [
+            {'message': '엄마의 생일은 언제일까요?', 'answer': None},
+            {'message': '아빠의 생일은 언제일까요?', 'answer': None},
+            {'message': '엄마 아빠의 결혼 기념일은?', 'answer': None},
+        ]
         return {
             'id': self.id,
             'name': self.name,
@@ -50,4 +55,5 @@ class User(Base):
             'email': self.email,
             'gender': self.gender,
             'chatroom': self.chatroom.to_json(),
+            'question_sample': samples,
         }
