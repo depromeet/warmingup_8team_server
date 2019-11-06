@@ -11,8 +11,7 @@ app: Flask = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 app.config.from_object(Config)
 CORS(app, supports_credentials=True)
-session = Session()
-session.init_app(app)
+session = Session(app)
 
 
 @app.before_request

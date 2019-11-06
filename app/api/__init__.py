@@ -21,17 +21,13 @@ from flask import session
 
 @route('/', methods=['GET'])
 def index(context: ApiContext):
-    return {
-        'kkirook': 'hi'
-    }
+    return {'kkirook': 'hi'}
 
 
 @socket_io.on('connect')
 def connect():
     context: ApiContext = create_context()
-    print(context.session)
     join_room(context.user.chatroom.url)
-    print('join')
 
 
 @socket_io.on("message")
