@@ -1,6 +1,7 @@
 from app import models
 from app.api import route
 from app.context import ApiContext
+from flask import request
 
 
 @route('/question/sample', methods=['GET'])
@@ -14,7 +15,7 @@ def get_question_samples(context: ApiContext) -> dict:
     return {'samples': samples}
 
 
-@route('/question', methods=['POST'])
+@route('/question', methods=['GET', 'POST'])
 def create_question(context: ApiContext) -> dict:
     """
     usage:
@@ -23,15 +24,20 @@ def create_question(context: ApiContext) -> dict:
      - message (required) -> str
      - answer (required) -> str
     """
+    if request.method == 'POST':
+        bot = context.user.chatroom.bot
+        question = models.Question(
+            message=context.data['message'], answer=context.data['answer'], bot=bot
+        )
+        context.session.add(question)
+        context.session.flush()
 
-    bot = context.user.chatroom.bot
-    question = models.Question(
-        message=context.data['message'], answer=context.data['answer'], bot=bot
-    )
-    context.session.add(question)
-    context.session.flush()
-
-    return question.to_json()
+        return question.to_json()
+    else:
+        questions: models.Question = context.user.questions
+        return {
+            'questions': [q.to_json() for q in questions]
+        }
 
 
 @route('/question/<int:id>', methods=['POST'])
