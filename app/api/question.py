@@ -24,9 +24,10 @@ def create_question(context: ApiContext) -> dict:
      - answer (required) -> str
     """
 
-    bot = context.user.chatroom.bot
     question = models.Question(
-        message=context.data['message'], answer=context.data['answer'], bot=bot
+        message=context.data['message'],
+        answer=context.data['answer'],
+        user=context.user,
     )
     context.session.add(question)
     context.session.flush()

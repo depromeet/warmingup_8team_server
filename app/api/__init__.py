@@ -40,5 +40,4 @@ def request(data):
 
     send_message = context.user.send_message(message)
     send(send_message.to_json(), broadcast=True, room=chatroom.url)
-    print(send_message.to_json())
     context.session.commit()

@@ -15,4 +15,4 @@ class Question(Base):
     user = relationship('User', back_populates='questions')
 
     def to_json(self):
-        return {'message': self.message, 'answer': self.answer}
+        return {'id': self.id, 'message': self.message, 'answer': self.answer}
