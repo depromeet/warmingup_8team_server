@@ -31,7 +31,7 @@ def connect():
 
 
 @socket_io.on("message")
-def request(data):
+def request_message(data):
     context: ApiContext = create_context()
     chatroom = context.user.chatroom
     chatroom_users = chatroom.users

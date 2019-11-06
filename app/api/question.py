@@ -1,3 +1,5 @@
+from typing import List
+
 from app import models
 from app.api import route
 from app.context import ApiContext
@@ -12,6 +14,12 @@ def get_question_samples(context: ApiContext) -> dict:
     ]
 
     return {'samples': samples}
+
+
+@route('/question', methods=['GET'])
+def get_question(context: ApiContext) -> dict:
+    questions: List[models.Question] = context.user.questions
+    return {'questions': [q.to_json() for q in questions]}
 
 
 @route('/question', methods=['POST'])
