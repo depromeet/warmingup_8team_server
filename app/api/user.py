@@ -43,17 +43,18 @@ def login(context: ApiContext) -> dict:
     session['user_id'] = user.id
     context.user = user
 
-    if context.data.get('url'):
+    if context.data.get('url') is None and context.user.chatroom is None:
+        chatroom = models.Chatroom()
+        context.session.add(chatroom)
+        context.session.flush()
+    else:
         chatroom = (
             context.session.query(models.Chatroom)
             .filter(models.Chatroom.url == context.data['url'])
             .first()
         )
         user.chatroom = chatroom
-    else:
-        chatroom = models.Chatroom()
-        context.session.add(chatroom)
-        context.session.flush()
+
     context.user.chatroom = chatroom
 
     return context.user.to_json()

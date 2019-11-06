@@ -32,6 +32,7 @@ def connect():
 
 @socket_io.on("message")
 def request_message(data):
+    # TODO(clogic): event trigger해서 bot도 메시지 보내도록 해야 함
     context: ApiContext = create_context()
     chatroom = context.user.chatroom
     chatroom_users = chatroom.users
