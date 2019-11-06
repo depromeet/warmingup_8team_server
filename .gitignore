@@ -281,3 +281,5 @@ dpm.code-workspace
 *.png
 *.jpg
 *.jpeg
+
+flask_sessionstore/
