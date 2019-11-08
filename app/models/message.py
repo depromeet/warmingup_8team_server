@@ -27,11 +27,19 @@ class Message(Base):
          - text
          - created_at
         """
-        return {
+        res = {
             'id': self.id,
-            'user_id': self.user.id,
-            'name': self.user.name,
-            'thumbnail_url': self.user.thumbnail_url,
             'text': self.text,
             'created_at': str(self.created_at + timedelta(hours=9)),
         }
+
+        if self.user:
+            res.update(
+                {
+                    'user_id': self.user.id,
+                    'name': self.user.name,
+                    'thumbnail_url': self.user.thumbnail_url,
+                }
+            )
+
+        return res
